@@ -91,7 +91,7 @@ void loop(){
   Serial.print(min:);
   Serial.println(pin_3_status);
   Serial.print(sec:);
-  Serial.print(pin_4_status);
+  Serial.println(pin_4_status);
   //==debug end==
   delay(1000);
   //lcd.clear(); ref usage
