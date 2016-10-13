@@ -1,0 +1,61 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27,16,2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+int persistent_hour=0,hour=0,minute=0,second=0;
+
+void hrsf(){ //hour function
+  lcd.setCursor(0,0);
+}
+
+void minf(){ //minute function
+  lcd.setCursor(3,0);
+}
+
+void secf(){
+  lcd.setCursor(6,0);
+}
+
+void setup(){
+  lcd.init(); // initialize the lcd
+  lcd.backlight();
+  lcd.setCursor(2,0);//Usage: setCursor(column,line)
+  lcd.print(":  :");
+  hrsf();
+  lcd.print("00");
+  minf();
+  lcd.print("00");
+  secf();
+  lcd.print("00");
+  pinMode(2, INPUT);//hour add
+  digitalWrite(7, LOW);
+  //pinMode(2, INPUT);
+  //==debug==
+  Serial.begin(9600);
+  //==debug==
+}
+int pin_2_status;
+void loop(){
+  pin_2_status = digitalRead(2);
+  //if(persistent_hour !=0){
+  //  hour=persistent_hour;
+  //}
+  //else hour=0;
+  hrsf();
+  if(hour<10){
+    lcd.print("0");
+    lcd.setCursor(1,0);
+    lcd.print(hour);
+  }
+  else lcd.print(hour);
+  pin_2_status = digitalRead(2);
+  if (pin_2_status == HIGH){
+    hour++;
+  }
+  if(hour>99){ //TEMP FIX FOR HOUR LARGER THAN DISPLAY SIZE=
+    hour-=100;
+  }//TEMP FIX ENDS HERE=====================================
+  Serial.println(pin_2_status);
+  delay(1000);
+  //lcd.clear();
+}
